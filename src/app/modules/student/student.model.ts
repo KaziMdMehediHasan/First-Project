@@ -1,8 +1,8 @@
 import { Schema, model } from 'mongoose';
 import validator from 'validator';
-import { TGuardian, TLocalGuardian, TStudent, /*StudentMethods,*/ StudentModel, TUserName } from './student/student.interface';
+import { TGuardian, TLocalGuardian, TStudent, /*StudentMethods,*/ StudentModel, TUserName } from './student.interface';
 import bycrypt from 'bcrypt';
-import config from '../config';
+import config from '../../config';
 
 const userNameSchema = new Schema<TUserName>({
     firstName: {
@@ -90,8 +90,22 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 })
 
 const studentSchema = new Schema<TStudent, StudentModel /*,StudentMethods */>({
-    id: { type: String, required: true, unique: true },
-    password: { type: String, required: [true, "Password is required"], maxlength: [20, 'Password cannot be more than 20 characters!'] },
+    id: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    user: {
+        type: Schema.Types.ObjectId,
+        required: [true, 'User ID is required'],
+        unique: true,
+        ref: 'Users'
+    },
+    // password: {
+    //     type: String,
+    //     required: [true, "Password is required"],
+    //     maxlength: [20, 'Password cannot be more than 20 characters!']
+    // },
     name: {
         type: userNameSchema,
         required: true,
@@ -133,11 +147,11 @@ const studentSchema = new Schema<TStudent, StudentModel /*,StudentMethods */>({
         required: true
     },
     profileImg: { type: String },
-    isActive: {
-        type: String,
-        enum: ['active', 'blocked'],
-        default: 'active'
-    },
+    // isActive: {
+    //     type: String,
+    //     enum: ['active', 'blocked'],
+    //     default: 'active'
+    // },
     isDeleted: {
         type: Boolean,
         default: false
@@ -149,20 +163,20 @@ const studentSchema = new Schema<TStudent, StudentModel /*,StudentMethods */>({
 // document middleware
 // pre save middleware /hook: works on create()  save() function
 
-studentSchema.pre('save', async function (next) {
-    // console.log(this, 'pre hook: we will save the data');
-    const user = this; //this refers to the document
-    // hashing the pass and save to the database
-    user.password = await bycrypt.hash(user.password, Number(config.bycrypt_salt_rounds));
-    next();
-})
+// studentSchema.pre('save', async function (next) {
+//     // console.log(this, 'pre hook: we will save the data');
+//     const user = this; //this refers to the document
+//     // hashing the pass and save to the database
+//     user.password = await bycrypt.hash(user.password, Number(config.bycrypt_salt_rounds));
+//     next();
+// })
 
-// post middleware / hook
-studentSchema.post('save', function (doc, next) {
-    doc.password = '';
-    console.log('Password is hidden');
-    next();
-})
+// // post middleware / hook
+// studentSchema.post('save', function (doc, next) {
+//     doc.password = '';
+//     console.log('Password is hidden');
+//     next();
+// })
 
 // query middleware
 
