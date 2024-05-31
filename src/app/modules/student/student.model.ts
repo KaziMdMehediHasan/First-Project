@@ -101,11 +101,6 @@ const studentSchema = new Schema<TStudent, StudentModel /*,StudentMethods */>({
         unique: true,
         ref: 'Users'
     },
-    // password: {
-    //     type: String,
-    //     required: [true, "Password is required"],
-    //     maxlength: [20, 'Password cannot be more than 20 characters!']
-    // },
     name: {
         type: userNameSchema,
         required: true,
@@ -147,19 +142,29 @@ const studentSchema = new Schema<TStudent, StudentModel /*,StudentMethods */>({
         required: true
     },
     profileImg: { type: String },
-    // isActive: {
-    //     type: String,
-    //     enum: ['active', 'blocked'],
-    //     default: 'active'
-    // },
+
     admissionSemester: {
         type: Schema.Types.ObjectId,
         ref: 'AcademicSemester',
+    },
+    academicDepartment: {
+        type: Schema.Types.ObjectId,
+        ref: 'AcademicDepartment',
     },
     isDeleted: {
         type: Boolean,
         default: false
     },
+    // password: {
+    //     type: String,
+    //     required: [true, "Password is required"],
+    //     maxlength: [20, 'Password cannot be more than 20 characters!']
+    // },
+    // isActive: {
+    //     type: String,
+    //     enum: ['active', 'blocked'],
+    //     default: 'active'
+    // },
 }, {
     toJSON:
         { virtuals: true }
