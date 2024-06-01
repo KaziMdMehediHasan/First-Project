@@ -19,6 +19,7 @@ const userNameValidationSchema = z.object({
         })
 });
 
+
 // Guardian Schema
 const guardianValidationSchema = z.object({
     fatherName: z.string().trim().min(1, { message: 'Father name cannot be empty' }),
@@ -37,11 +38,6 @@ const localGuardianValidationSchema = z.object({
     address: z.string().trim().min(1, { message: 'Address cannot be empty' })
 });
 
-// boolean schema
-// const isDeleted = z.boolean({
-//     required_error: "isDeleted is required",
-//     invalid_type_error: "isDeleted must be a boolean",
-// });
 
 // Student Schema
 const createStudentValidationSchema = z.object({
@@ -74,6 +70,60 @@ const createStudentValidationSchema = z.object({
 
 });
 
+//update validation schemas
+const updateUserNameValidationSchema = z.object({
+    firstName: z.string().min(1).max(20).optional(),
+    middleName: z.string().optional(),
+    lastName: z.string().optional()
+});
+const updateGuardianValidationSchema = z.object({
+    fatherName: z.string().optional(),
+    fatherOccupation: z.string().optional(),
+    fatherContactNo: z.string().optional(),
+    motherName: z.string().optional(),
+    motherOccupation: z.string().optional(),
+    motherContactNo: z.string().optional()
+});
+
+const updateLocalGuardianValidationSchema = z.object({
+    name: z.string().optional(),
+    occupation: z.string().optional(),
+    contactNo: z.string().optional(),
+    address: z.string().optional()
+});
+
+// boolean schema
+// const isDeleted = z.boolean({
+//     required_error: "isDeleted is required",
+//     invalid_type_error: "isDeleted must be a boolean",
+// });
+
+const updateStudentValidationSchema = z.object({
+    body: z.object({
+        student: z.object({
+            name: updateUserNameValidationSchema,
+            gender: z.enum(['male', 'female']).optional(),
+            dateOfBirth: z.string().optional(),
+            email: z.string().optional(),
+            contactNumber: z.string().min(1, { message: 'Contact number cannot be empty' }).optional(),
+            emergencyContactNo: z.string().optional(),
+            bloodGroup: z.enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']).optional(),
+            presentAddress: z.string().optional(),
+            permanentAddress: z.string().optional(),
+            guardian: updateGuardianValidationSchema.optional(),
+            localGuardian: updateLocalGuardianValidationSchema.optional(),
+            admissionSemester: z.string().optional(),
+            academicDepartment: z.string().optional(),
+            profileImg: z.string().optional()
+            // isActive: z.enum(['active', 'blocked']).default('active'),
+            // isDeleted: z.boolean()
+        })
+    })
+
+});
+
+
 export const StudentValidations = {
-    createStudentValidationSchema
+    createStudentValidationSchema,
+    updateStudentValidationSchema
 };

@@ -54,8 +54,20 @@ const deleteStudent: RequestHandler = async (req, res, next) => {
         next(error);
     }
 }
+
+const updateStudent = catchAsync(async (req, res) => {
+    console.log('This is how client sends the data- controller :', req.body);
+    const result = await StudentServices.updateStudentIntoDB(req.params.studentId, req.body.student);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Student updated successfully',
+        data: result
+    });
+})
 export const StudentControllers = {
     getAllStudents,
     getSingleStudent,
-    deleteStudent
+    deleteStudent,
+    updateStudent
 }
