@@ -20,6 +20,17 @@ app.use(cors())
 
 // refactored version
 
+// for testing purpose only
+const test = async (req: Request, res: Response) => {
+    // const a = 10;
+    // res.send(a);
+
+    Promise.reject();
+}
+
+app.get('/', test);
+
+// end of testing code
 app.use('/api/v1', router);
 
 console.log(process.cwd())
