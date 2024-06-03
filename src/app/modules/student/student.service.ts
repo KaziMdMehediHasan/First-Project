@@ -22,8 +22,18 @@ import { Users } from "../user/user.model";
 //     return result;
 // }
 
-const getAllStudentsFromDB = async () => {
-    const result = await Student.find().populate('admissionSemester').populate({
+const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
+    console.log('From services:', query);
+    let searchTerm = '';
+    if (query?.searchTerm) {
+        searchTerm = query.searchTerm as string;
+    }
+    const searchableFields = ['name.firstName', 'email', 'name.middleName', 'name.lastName'];
+    const result = await Student.find({
+        $or: searchableFields.map((field) => {
+            return { [field]: { $regex: searchTerm, $options: 'i' } }
+        })
+    }).populate('admissionSemester').populate({
         path: 'academicDepartment',
         populate: {
             path: 'academicFaculty'

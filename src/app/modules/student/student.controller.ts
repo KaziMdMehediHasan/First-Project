@@ -7,7 +7,8 @@ import catchAsync from "../../utils/catchAsync";
 
 // updated catchAsync method
 const getAllStudents = catchAsync(async (req, res, next) => {
-    const result = await StudentServices.getAllStudentsFromDB();
+    console.log(`From controller:`, req.query);
+    const result = await StudentServices.getAllStudentsFromDB(req.query);
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -56,7 +57,7 @@ const deleteStudent: RequestHandler = async (req, res, next) => {
 }
 
 const updateStudent = catchAsync(async (req, res) => {
-    console.log('This is how client sends the data- controller :', req.body);
+    // console.log('This is how client sends the data- controller :', req.body);
     const result = await StudentServices.updateStudentIntoDB(req.params.studentId, req.body.student);
     sendResponse(res, {
         statusCode: httpStatus.OK,
